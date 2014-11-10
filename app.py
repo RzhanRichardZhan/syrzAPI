@@ -18,13 +18,16 @@ def t(tag="Harry%20Potter"):
     result = request.read()
     d = json.loads(result)
     page = ""
+	items = []
     for r in d["findItemsByKeywordsResponse"][0]["searchResult"][0]["item"]:
-        print r["listingInfo"][0]["listingType"][0]
+        #print r["listingInfo"][0]["listingType"][0]
         if r["country"][0] == 'US' and r["listingInfo"][0]["listingType"][0] != "Auction":
-            page = page + r["title"][0] + "<br>Price: $" + r["sellingStatus"][0]["currentPrice"][0]["__value__"]# + " + Shipping: $" + r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"]
-            page = page + "<hr>"
+            #page = page + r["title"][0] + "<br>Price: $" + r["sellingStatus"][0]["currentPrice"][0]["__value__"]# + " + Shipping: $" + r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"]
+            #page = page + "<hr>"
+			items.append([r["title"][0], r["sellingStatus"][0]["currentPrice"][0]["__value__"], r["shippingInfo"[0]["shippingServiceCost"][0] if ("shippingServiceCost" in r["shippingInfo"][0]) else "", r["viewItemURL"][0]])
         #break
-    return page
+		
+    return render_template("tag.html", page = items)
 
 
 
