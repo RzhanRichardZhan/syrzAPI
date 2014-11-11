@@ -10,7 +10,9 @@
       {% for x in page %}
         Name: <a href={{x[3]}}>{{x[0]}}</a>
         <br>
-        Price: {{x[1]}} Shipping Price: {{x[2]}}
+        Price: ${{x[1]}}
+	<br>
+	Shipping Price: ${{x[2]}}
 	<hr>
       {% endfor %}
     </div>

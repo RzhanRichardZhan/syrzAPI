@@ -4,9 +4,11 @@ app=Flask(__name__)
 
 def query(s):
     return s.replace(" ", "%20")
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-    return "hello"
+    if request.method == "GET" and request.args.get("submit",None)=="yes":
+        return redirect("/t/%s"%request.args.get("q",None))
+    return render_template("home.html")
 
 
 @app.route("/t")
@@ -18,13 +20,16 @@ def t(tag="Harry%20Potter"):
     result = request.read()
     d = json.loads(result)
     page = ""
-	items = []
+    items = []
     for r in d["findItemsByKeywordsResponse"][0]["searchResult"][0]["item"]:
         #print r["listingInfo"][0]["listingType"][0]
         if r["country"][0] == 'US' and r["listingInfo"][0]["listingType"][0] != "Auction":
             #page = page + r["title"][0] + "<br>Price: $" + r["sellingStatus"][0]["currentPrice"][0]["__value__"]# + " + Shipping: $" + r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"]
             #page = page + "<hr>"
-			items.append([r["title"][0], r["sellingStatus"][0]["currentPrice"][0]["__value__"], r["shippingInfo"[0]["shippingServiceCost"][0] if ("shippingServiceCost" in r["shippingInfo"][0]) else "", r["viewItemURL"][0]])
+            print r["title"][0]
+            print r["sellingStatus"][0]["currentPrice"][0]["__value__"]
+            print r["viewItemURL"][0]
+            items.append([r["title"][0], r["sellingStatus"][0]["currentPrice"][0]["__value__"], r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"] if "shippingServiceCost" in r["shippingInfo"][0] else "", r["viewItemURL"][0]])
         #break
 		
     return render_template("tag.html", page = items)
