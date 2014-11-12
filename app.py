@@ -17,7 +17,7 @@ def expense(L):
 def index():
 	if request.method == "GET" and request.args.get("submit",None)=="yes":
 		return redirect("/t/%s"%request.args.get("q",None))
-	return render_template("home.html")
+	return render_template("home.html",error="")
 
 
 @app.route("/t")
@@ -30,6 +30,8 @@ def t(tag):
 		url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=RichardZ-f87b-4d7d-a4c3-966a1890f59e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=%s"
 		url = url%(tag_url)
 		d = json.load(urllib2.urlopen(url))
+		if d["findItemsByKeywordsResponse"][0]["searchResult"][0]["@count"]=="0":
+			return render_template("home.html",error="No Search Results")
 		page = ""
 		items = []
 		prices = []
@@ -41,7 +43,7 @@ def t(tag):
 				item_attributes = r["title"][0].split(" ")
 				for attribute in item_attributes:
 					attribute = attribute.lower()
-					if attribute not in tag:
+					if attribute not in tag.lower():
 						if attribute not in attributes:
 							attributes[attribute]=1
 						else:
