@@ -14,7 +14,8 @@ def index():
 @app.route("/t")
 @app.route("/t/<tag>")
 def t(tag="Harry Potter"):
-	if (request.args.get("original_query") == None):
+	print request.args.get("original_query") #Unchecking the box will cause it to return None
+	if ((request.args.get("original_query") == None) and (request.args.get("attributes") == None)):
 		tag_url = urllib.quote(tag)
 		url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=RichardZ-f87b-4d7d-a4c3-966a1890f59e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=%s"
 		url = url%(tag_url)
@@ -27,9 +28,6 @@ def t(tag="Harry Potter"):
 			if r["country"][0] == 'US' and r["listingInfo"][0]["listingType"][0] != "Auction":
 				#page = page + r["title"][0] + "<br>Price: $" + r["sellingStatus"][0]["currentPrice"][0]["__value__"]# + " + Shipping: $" + r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"]
 				#page = page + "<hr>"
-				print r["title"][0]
-				print r["sellingStatus"][0]["currentPrice"][0]["__value__"]
-				print r["viewItemURL"][0]
 				items.append([r["title"][0], r["sellingStatus"][0]["currentPrice"][0]["__value__"], r["shippingInfo"][0]["shippingServiceCost"][0]["__value__"] if "shippingServiceCost" in r["shippingInfo"][0] else "", r["viewItemURL"][0]])
 				item_attributes = r["title"][0].split(" ")
 				for attribute in item_attributes:
