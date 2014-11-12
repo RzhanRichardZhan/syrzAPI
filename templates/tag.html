@@ -22,10 +22,10 @@
 	  <h3>Advanced Search Options</h3>
 		Select the attribute(s) that you want to search for:<br>
 		<form>
-			<select multiple name="attributes" required size="10" style="width: 100%">{% for attribute in attributes %}
+			<select multiple name="attributes" required size="25" style="width: 100%">{% for attribute in attributes %}
 				<option value="{{attribute}}">{{attribute}}</option>{% endfor %}
 			</select><br>
-			<input name="original_query" type="checkbox" value="True">Include original query<br>
+			<input name="original_query" checked type="checkbox" value="True">Include original query<br>
 			<input type="submit">
 		</form>
 	</div>
