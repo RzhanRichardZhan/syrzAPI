@@ -23,7 +23,8 @@ def index():
 @app.route("/t")
 @app.route("/t/<tag>")
 def t(tag="Harry Potter"):
-	print request.args.get("original_query") #Unchecking the box will cause it to return None
+	if (request.args.get("q") != None):
+		return redirect("/t/" + request.args.get("q"))
 	if ((request.args.get("original_query") == None) and (request.args.get("attributes") == None)):
 		tag_url = urllib.quote(tag)
 		url = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=RichardZ-f87b-4d7d-a4c3-966a1890f59e&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=%s"
